@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avnish Ranjan — SDET</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface: #141720;
+      --border: #1e2330;
+      --accent: #00e5ff;
+      --accent2: #ff3d6b;
+      --text: #c8d0e0;
+      --dim: #606880;
+      --white: #eef1f8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid noise overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,229,255,0.03) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,229,255,0.03) 40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+      animation: fadeSlideDown 0.7s ease both;
+    }
+
+    .name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(38px, 7vw, 72px);
+      color: var(--white);
+      line-height: 0.95;
+      letter-spacing: -2px;
+    }
+
+    .name span {
+      display: block;
+      color: var(--accent);
+      -webkit-text-stroke: 1px var(--accent);
+      text-shadow: 0 0 30px rgba(0,229,255,0.4);
+    }
+
+    .title-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+
+    .contact-block {
+      text-align: right;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .contact-block a {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-block a:hover { color: var(--accent); }
+
+    .contact-block .location {
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      margin-bottom: 56px;
+      animation: fadeSlideUp 0.7s ease both;
+    }
+
+    section:nth-child(2) { animation-delay: 0.1s; }
+    section:nth-child(3) { animation-delay: 0.15s; }
+    section:nth-child(4) { animation-delay: 0.2s; }
+    section:nth-child(5) { animation-delay: 0.25s; }
+    section:nth-child(6) { animation-delay: 0.3s; }
+
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* ─── SUMMARY ─── */
+    .summary-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.8;
+      max-width: 720px;
+      padding-left: 16px;
+      border-left: 2px solid var(--accent);
+    }
+
+    /* ─── SKILLS ─── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .skill-group:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .skill-group::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    .skill-cat {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 10px;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: rgba(0,229,255,0.06);
+      border: 1px solid rgba(0,229,255,0.15);
+      color: var(--text);
+      font-size: 10px;
+      padding: 3px 9px;
+      letter-spacing: 0.5px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tag:hover {
+      background: rgba(0,229,255,0.15);
+      color: var(--accent);
+    }
+
+    /* ─── EXPERIENCE ─── */
+    .exp-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 28px 24px;
+      margin-bottom: 16px;
+      position: relative;
+      transition: border-color 0.25s;
+    }
+    .exp-item:hover { border-color: rgba(0,229,255,0.3); }
+
+    .exp-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .exp-role {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .exp-company {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
+
+    .exp-date {
+      font-size: 10px;
+      color: var(--dim);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .exp-bullets li {
+      padding-left: 20px;
+      position: relative;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .exp-bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent2);
+      font-size: 14px;
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.08), transparent 70%);
+    }
+
+    .project-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .tech-pill {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      border: 1px solid rgba(255,61,107,0.3);
+      padding: 2px 7px;
+    }
+
+    .project-desc {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .project-desc li {
+      font-size: 11px;
+      color: var(--dim);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .project-desc li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--border);
+    }
+
+    /* ─── EDUCATION ─── */
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .edu-degree {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--white);
+    }
+
+    .edu-school {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    .edu-courses {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 8px;
+    }
+
+    .edu-date {
+      font-size: 10px;
+      color: var(--dim);
+      letter-spacing: 1px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* ─── METRICS BAR ─── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 56px;
+      animation: fadeSlideUp 0.7s 0.05s ease both;
+    }
+
+    .metric {
+      background: var(--surface);
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(0,229,255,0.3);
+    }
+
+    .metric-label {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 10px;
+      color: var(--dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      header { grid-template-columns: 1fr; }
+      .contact-block { text-align: left; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .exp-header { flex-direction: column; gap: 4px; }
+      .exp-date { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <div class="name">Avnish<span>Ranjan</span></div>
+      <div class="title-tag">// Software Development Engineer in Test</div>
+    </div>
+    <div class="contact-block">
+      <a href="tel:+919660346509">+91-9660346509</a>
+      <a href="mailto:avnishranjan7@gmail.com">avnishranjan7@gmail.com</a>
+      <a href="https://linkedin.com/in/avnishranjan" target="_blank">linkedin.com/in/avnishranjan</a>
+      <div class="location">📍 Mohali, Punjab, India</div>
+    </div>
+  </header>
+
+  <!-- METRICS -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-val">70%</div>
+      <div class="metric-label">Manual Testing Reduction</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val">200+</div>
+      <div class="metric-label">Automated Test Cases</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val">95%</div>
+      <div class="metric-label">Defect Detection Rate</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val">10K+</div>
+      <div class="metric-label">Concurrent Users Tested</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <section>
+    <div class="section-label">// Summary</div>
+    <p class="summary-text">
+      Software Development Engineer in Test with 1+ year of experience building automated testing frameworks and ensuring software quality for enterprise applications. Proficient in test automation, API testing, performance engineering, and CI/CD integration. Strong programming foundation in Java with expertise in Selenium, TestNG, and JMeter. Experienced in Agile workflows and collaborative development environments.
+    </p>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <div class="section-label">// Technical Skills</div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-cat">Languages</div>
+        <div class="skill-list">
+          <span class="tag">Java</span>
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+          <span class="tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-cat">Testing Frameworks</div>
+        <div class="skill-list">
+          <span class="tag">Selenium WebDriver</span>
+          <span class="tag">TestNG</span>
+          <span class="tag">JUnit</span>
+          <span class="tag">REST Assured</span>
+          <span class="tag">Cucumber</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-cat">Performance & API</div>
+        <div class="skill-list">
+          <span class="tag">JMeter</span>
+          <span class="tag">Postman</span>
+          <span class="tag">REST API</span>
+          <span class="tag">SOAP API</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-cat">DevOps & CI/CD</div>
+        <div class="skill-list">
+          <span class="tag">Jenkins</span>
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Maven</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-cat">Tools</div>
+        <div class="skill-list">
+          <span class="tag">JIRA</span>
+          <span class="tag">TestRail</span>
+          <span class="tag">Selenium Grid</span>
+          <span class="tag">POM</span>
+          <span class="tag">Apache POI</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-cat">Methodologies</div>
+        <div class="skill-list">
+          <span class="tag">Agile</span>
+          <span class="tag">Scrum</span>
+          <span class="tag">SDLC</span>
+          <span class="tag">STLC</span>
+          <span class="tag">TDD</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section>
+    <div class="section-label">// Experience</div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Software Test Engineer</div>
+          <div class="exp-company">HanuAI Pvt. Ltd — Mohali, India</div>
+        </div>
+        <div class="exp-date">Jan 2024 — Present</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Architected and implemented automated testing framework using Selenium WebDriver with Java and TestNG, achieving 70% reduction in manual testing efforts across 50+ test scenarios for RoadAthena enterprise platform.</li>
+        <li>Designed comprehensive test automation suites including functional, regression, and smoke tests using Page Object Model design pattern, improving test maintainability by 60%.</li>
+        <li>Performed API testing and validation using JMeter and Postman, creating automated performance test scripts that identified critical bottlenecks and improved application response time by 40%.</li>
+        <li>Integrated automated tests into CI/CD pipeline using Jenkins, reducing deployment cycle time from 3 days to 8 hours.</li>
+        <li>Collaborated with cross-functional Agile teams across 12+ production releases, maintaining 95% defect detection rate before production deployment.</li>
+        <li>Executed load and stress testing using JMeter to simulate 10,000+ concurrent users, validating system scalability under peak loads.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Software Engineer</div>
+          <div class="exp-company">Freelance / Contract — Remote</div>
+        </div>
+        <div class="exp-date">Apr 2023 — Dec 2023</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Developed automation scripts and test utilities using Java and Python to streamline testing processes.</li>
+        <li>Gained hands-on experience with SDLC, version control systems, and collaborative development workflows.</li>
+        <li>Contributed to open-source projects and technical documentation, enhancing problem-solving and coding skills.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section>
+    <div class="section-label">// Key Projects</div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-name">RoadAthena Test Automation Framework</div>
+        <div class="project-tech">
+          <span class="tech-pill">Selenium</span>
+          <span class="tech-pill">Java</span>
+          <span class="tech-pill">TestNG</span>
+          <span class="tech-pill">Maven</span>
+          <span class="tech-pill">Jenkins</span>
+        </div>
+        <ul class="project-desc">
+          <li>Built end-to-end test automation framework from scratch using Selenium WebDriver with POM architecture.</li>
+          <li>Implemented data-driven testing with Apache POI for Excel integration, enabling parameterized test execution.</li>
+          <li>Created 200+ automated test cases covering critical business workflows with 90%+ pass rate consistency.</li>
+          <li>Integrated with Jenkins for scheduled execution and automated reporting via Extent Reports.</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">API Performance Testing Suite</div>
+        <div class="project-tech">
+          <span class="tech-pill">JMeter</span>
+          <span class="tech-pill">REST API</span>
+          <span class="tech-pill">JSON</span>
+          <span class="tech-pill">Performance Analysis</span>
+        </div>
+        <ul class="project-desc">
+          <li>Developed comprehensive performance testing suite for REST APIs using Apache JMeter with custom listeners.</li>
+          <li>Conducted load testing simulations with up to 5,000 concurrent virtual users to identify performance degradation.</li>
+          <li>Generated detailed performance metrics reports; optimization recommendations improved API response time by 35%.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section>
+    <div class="section-label">// Education</div>
+    <div class="edu-card">
+      <div>
+        <div class="edu-degree">B.Tech in Computer Software Engineering</div>
+        <div class="edu-school">Chandigarh University — Mohali, India</div>
+        <div class="edu-courses">DSA · Software Engineering · DBMS · OS · Computer Networks</div>
+      </div>
+      <div class="edu-date">Aug 2021 — Jul 2025</div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section>
+    <div class="section-label">// Certifications & Learning</div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-cat">Completed</div>
+        <div class="skill-list">
+          <span class="tag">Academic Research Foundations</span>
+          <span class="tag">How to Present and Stay on Point</span>
+          <span class="tag">Learning Brainstorming</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-cat">In Progress</div>
+        <div class="skill-list">
+          <span class="tag">Advanced DevOps</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag">AWS Testing</span>
+          <span class="tag">Azure</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Avnish Ranjan &nbsp;·&nbsp; SDET &nbsp;·&nbsp; Mohali, India &nbsp;·&nbsp; 2025
+  </footer>
+
+</div>
+
+</body>
+</html>
